@@ -32,3 +32,11 @@
     state: present
   with_items: "{{ required_packages }}"
 
+- name: "Check if machine is joined to the domain already"
+  shell: realm -v list
+  register: ad_check
+
+- name: "Join active directoty domain"
+  #shell: realm join -v -U {{ service_account }}@{{ domain.upper() }} --computer-ou='{{ ou }}' {{ domain }}
+  shell: realm -v list
+  when: ad_check.stdout.find("No") != -1
