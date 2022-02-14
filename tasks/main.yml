@@ -37,8 +37,7 @@
   register: ad_check
 
 - name: "Obtain Kerberos Ticket for Service Account"
-  shell: kinit -k {{ service_account }}@{{ service_domain.upper() }} "{{ service_password }}"
-  #echo -n "{{ service_password }}" |
+  shell: echo -n "{{ service_password }}" | kinit -c /tmp/mykrb5cc {{ service_account }}@{{ service_domain.upper() }}
   #when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
