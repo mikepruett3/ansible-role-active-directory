@@ -1,15 +1,15 @@
 ---
   sssd_daemon: sssd
   realmd_package: realmd
-  required_packages:
-    - sssd
-    - sssd-ad
-    - sssd-tools
-    - libnss-sss
-    - libpam-sss
-    - realmd
-    - adcli
-    - samba-common-bin
-    - sbmclient
-    - krb5-user
+  #required_packages:
+  #  - sssd
+  #  - sssd-ad
+  #  - sssd-tools
+  #  - libnss-sss
+  #  - libpam-sss
+  #  - realmd
+  #  - adcli
+  #  - samba-common-bin
+  #  - sbmclient
+  #  - krb5-user
   

@@ -9,18 +9,18 @@
     manager: auto
   when: ansible_facts.packages is not defined
 
-#- name: "Install Realm Daemon package"
-#  ansible.builtin.package:
-#    name: "{{ realmd_package }}"
-#    state: present
+- name: "Install Realm Daemon package"
+  ansible.builtin.package:
+    name: "{{ realmd_package }}"
+    state: present
 
 - name: "Discover required packages to join Domain"
   shell: realm discover {{ domain }} | grep "required-package:" | awk '{ print $2}'
   register: required_packages
 
-- name: "Show Discovery"
-  debug:
-    msg: "{{ required_packages.stdout_lines | list }}"
+#- name: "Show Discovery"
+#  debug:
+#    msg: "{{ required_packages.stdout_lines | list }}"
 
 - name: "Set required_packages facts"
   ansible.builtin.set_fact:
