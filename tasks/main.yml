@@ -4,15 +4,15 @@
 - name: "Include OS-specific variables"
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: "Gather the package facts"
-  ansible.builtin.package_facts:
-    manager: auto
-  when: ansible_facts.packages is not defined
+#- name: "Gather the package facts"
+#  ansible.builtin.package_facts:
+#    manager: auto
+#  when: ansible_facts.packages is not defined
 
-- name: "Install Realm Daemon package"
-  ansible.builtin.package:
-    name: "{{ realmd_package }}"
-    state: present
+#- name: "Install Realm Daemon package"
+#  ansible.builtin.package:
+#    name: "{{ realmd_package }}"
+#    state: present
 
 - name: "Discover required packages to join Domain"
   shell: realm discover {{ domain }}
@@ -20,7 +20,7 @@
 
 - name: "Show Discovery"
   debug:
-    msg: "{{ domain_discovery.stdout_lines | regex_search('^required-package:') }}"
+    msg: "{{ domain_discovery.stdout | regex_search('^required-package: ') }}"
 
 #- name: "Install required packages"
 #  ansible.builtin.package:
