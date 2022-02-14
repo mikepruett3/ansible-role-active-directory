@@ -15,7 +15,7 @@
     state: present
 
 - name: "Discover required packages to join active directory domain"
-  shell: realm discover {{ domain }} | grep "required-package:" | awk '{ print $2}'
+  shell: realm discover {{ service_domain }} | grep "required-package:" | awk '{ print $2}'
   register: required_packages
 
 #- name: "Show Discovery"
@@ -37,13 +37,13 @@
   register: ad_check
 
 - name: "Obtain Kerberos Ticket for Service Account"
-  shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ domain.upper() }}
+  shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
   when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
 # Fully-Qualified Username must, the domain must be in CAPS
 #- name: "Join host to the active directory domain"
-#  shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ domain.upper() }} --computer-ou='{{ ou }}' {{ domain }}
+#  shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
 #  when: ad_check.stderr | length != 0
 
 # https://ubuntu.com/server/docs/service-sssd
