@@ -1,2 +1,3 @@
 ---
   realmd_package: realmd
+  krb_package: krb5-workstation

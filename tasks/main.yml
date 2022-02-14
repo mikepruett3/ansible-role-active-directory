@@ -9,6 +9,11 @@
     manager: auto
   when: ansible_facts.packages is not defined
 
+- name: "Install Kerberos tools package"
+  ansible.builtin.package:
+    name: "{{ krb_package }}"
+    state: present
+
 - name: "Install Realm Daemon package"
   ansible.builtin.package:
     name: "{{ realmd_package }}"
