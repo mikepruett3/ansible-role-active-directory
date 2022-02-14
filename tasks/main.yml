@@ -11,7 +11,7 @@
 
 - name: "Install Realm Daemon package"
   ansible.builtin.package:
-    name: "{{ realmd }}"
+    name: "{{ realmd_package }}"
     state: present
 
 - name: "Discover required packages to join Domain"
