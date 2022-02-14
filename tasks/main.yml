@@ -37,7 +37,7 @@
   register: ad_check
 
 - name: "Obtain Kerberos Ticket for Service Account"
-  shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
+  shell: echo -n "{{ service_password }}" | kinit -c /tmp/mykrb5cc {{ service_account }}@{{ service_domain.upper() }}
   become: false
   #-c /tmp/mykrb5cc
   #when: ad_check.stderr | length != 0
