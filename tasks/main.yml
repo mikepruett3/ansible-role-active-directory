@@ -38,7 +38,7 @@
 
 - name: "Obtain Kerberos Ticket for Service Account"
   shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
-  when: ad_check.stderr | length != 0
+  #when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
 # Fully-Qualified Username must, the domain must be in CAPS
