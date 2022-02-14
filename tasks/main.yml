@@ -30,5 +30,5 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
-    with_items: { required_packages }
+  with_items: "{{ required_packages }}"
 
