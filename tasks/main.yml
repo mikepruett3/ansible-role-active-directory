@@ -20,7 +20,7 @@
 
 - name: "Show Discovery"
   debug:
-    msg: "{{ domain_discovery.stdout_lines | map('regex_findall','^required-package') | list }}"
+    msg: "{{ domain_discovery.stdout_lines | regex_search('^required-package:') }}"
 
 #- name: "Install required packages"
 #  ansible.builtin.package:
