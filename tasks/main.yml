@@ -19,7 +19,8 @@
   register: domain_discovery
 
 - name: "Show Discovery"
-  debug: domain_discovery.stdout
+  debug:
+    var: domain_discovery
 
 #- name: "Install required packages"
 #  ansible.builtin.package:
