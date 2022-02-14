@@ -9,9 +9,21 @@
     manager: auto
   when: ansible_facts.packages is not defined
 
-- name: "Install required packages"
+- name: "Install Realm Daemon package"
   ansible.builtin.package:
-    name: "{{ item }}"
+    name: "{{ realmd }}"
     state: present
-    with_items: "{{ required_packages }}"
+
+- name: "Discover required packages to join Domain"
+  shell: realm discover {{ domain }}
+  register: domain_discovery
+
+- name: "Show Discovery"
+  debug: domain_discovery.stdout
+
+#- name: "Install required packages"
+#  ansible.builtin.package:
+#    name: "{{ item }}"
+#    state: present
+#    with_items: "{{ required_packages }}"
 

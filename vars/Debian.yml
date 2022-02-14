@@ -1,5 +1,6 @@
 ---
   sssd_daemon: sssd
+  realmd_package: realmd
   required_packages:
     - sssd
     - sssd-ad

@@ -1,2 +1,5 @@
 ---
   # defaults file for ansible-role-active-directory/
+
+  domain: "example.com"
+  
