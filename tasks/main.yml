@@ -15,12 +15,12 @@
 #    state: present
 
 - name: "Discover required packages to join Domain"
-  shell: realm discover {{ domain }}
-  register: domain_discovery
+  shell: realm discover {{ domain }} | grep "required-package:" | awk '{ print $2}'
+  register: realmd_packages
 
 - name: "Show Discovery"
   debug:
-    msg: "{{ domain_discovery.stdout | regex_search('^required-package: ') }}"
+    msg: "{{ realmd_packages.stdout }}"
 
 #- name: "Install required packages"
 #  ansible.builtin.package:
