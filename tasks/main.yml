@@ -39,14 +39,14 @@
 
 - name: "Obtain Kerberos Ticket for Service Account"
   shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
-  become: false
+  #become: false
   when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
 # Fully-Qualified Username must, the domain must be in CAPS
 - name: "Join host to the active directory domain"
   shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
-  become: false
+  #become: false
   when: ad_check.stderr | length != 0
 
 # https://ubuntu.com/server/docs/service-sssd
