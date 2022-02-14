@@ -18,13 +18,13 @@
   shell: realm discover {{ domain }} | grep "required-package:" | awk '{ print $2}'
   register: required_packages
 
-#- name: "Show Discovery"
-#  debug:
-#    msg: "{{ required_packages.stdout_lines }}"
+- name: "Show Discovery"
+  debug:
+    msg: "{{ required_packages.stdout_lines | list }}"
 
 - name: "Install packages from required_packages discovery"
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
-    with_items: "{{ required_packages.stdout_lines | list}}"
+    with_items: "{{ required_packages.stdout_lines | list }}"
 
