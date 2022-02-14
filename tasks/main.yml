@@ -4,10 +4,10 @@
 - name: "Include OS-specific variables"
   include_vars: "{{ ansible_os_family }}.yml"
 
-#- name: "Gather the package facts"
-#  ansible.builtin.package_facts:
-#    manager: auto
-#  when: ansible_facts.packages is not defined
+- name: "Gather the package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+  when: ansible_facts.packages is not defined
 
 #- name: "Install Realm Daemon package"
 #  ansible.builtin.package:
