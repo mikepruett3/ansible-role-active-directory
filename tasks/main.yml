@@ -20,7 +20,7 @@
 
 - name: "Show Discovery"
   debug:
-    msg: "{{ realmd_packages.stdout }}"
+    msg: "{{ realmd_packages.stdout_lines }}"
 
 #- name: "Install required packages"
 #  ansible.builtin.package:
