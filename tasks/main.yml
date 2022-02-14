@@ -1,6 +1,12 @@
 ---
 # tasks file for ansible-role-active-directory/
 
+# Based on findings from the following guides:
+#   - https://ubuntu.com/server/docs/service-sssd
+#   - https://access.redhat.com/articles/216933
+#   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/windows_integration_guide/index
+#   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/integrating_rhel_systems_directly_with_windows_active_directory
+
 - name: "Include OS-specific variables"
   include_vars: "{{ ansible_os_family }}.yml"
 
@@ -39,17 +45,14 @@
 
 - name: "Obtain Kerberos Ticket for Service Account"
   shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
-  #become: false
   when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
 # Fully-Qualified Username must, the domain must be in CAPS
 - name: "Join host to the active directory domain"
   shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
-  #become: false
   when: ad_check.stderr | length != 0
 
-# https://ubuntu.com/server/docs/service-sssd
 - name: "Update pamd auth to create homedirs for new active directory users"
   shell: pam-auth-update --enable mkhomedir
   when:
