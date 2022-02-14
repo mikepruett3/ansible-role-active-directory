@@ -20,7 +20,7 @@
 
 - name: "Show Discovery"
   debug:
-    var: domain_discovery
+    msg: "{{ domain_discovery.stdout_lines | from_json).required-package }}"
 
 #- name: "Install required packages"
 #  ansible.builtin.package:
