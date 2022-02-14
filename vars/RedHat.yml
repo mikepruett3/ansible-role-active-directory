@@ -1,0 +1,13 @@
+---
+sssd_daemon: sssd
+required_packages:
+  - sssd
+  - sssd-ad
+  - sssd-tools
+  - libnss-sss
+  - libpam-sss
+  - realmd
+  - adcli
+  - samba-common-bin
+  - sbmclient
+  - krb5-user
