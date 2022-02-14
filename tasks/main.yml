@@ -22,9 +22,13 @@
   debug:
     msg: "{{ required_packages.stdout_lines | list }}"
 
+- name: "Set required_packages facts"
+  ansible.builtin.set_fact:
+    required_packages: "{{ required_packages.stdout_lines | list }}"
+
 - name: "Install packages from required_packages discovery"
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
-    with_items: "{{ required_packages.stdout_lines | list }}"
+    with_items: "{{ required_packages }}"
 
