@@ -18,10 +18,6 @@
   shell: realm discover {{ service_domain }} | grep "required-package:" | awk '{ print $2}'
   register: required_packages
 
-#- name: "Show Discovery"
-#  debug:
-#    msg: "{{ required_packages.stdout_lines | list }}"
-
 - name: "Set required_packages facts"
   ansible.builtin.set_fact:
     required_packages: "{{ required_packages.stdout_lines | list }}"
@@ -39,16 +35,18 @@
 - name: "Obtain Kerberos Ticket for Service Account"
   shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
   become: false
-  #-c /tmp/mykrb5cc
-  #when: ad_check.stderr | length != 0
+  when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
 # Fully-Qualified Username must, the domain must be in CAPS
-#- name: "Join host to the active directory domain"
-#  shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
-#  when: ad_check.stderr | length != 0
+- name: "Join host to the active directory domain"
+  shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
+  become: false
+  when: ad_check.stderr | length != 0
 
 # https://ubuntu.com/server/docs/service-sssd
-#- name: "Update pamd auth to create homedirs for new active directory users"
-#  shell: pam-auth-update --enable mkhomedir
-#  when: ad_check.stderr | length != 0
+- name: "Update pamd auth to create homedirs for new active directory users"
+  shell: pam-auth-update --enable mkhomedir
+  when:
+    - ad_check.stderr | length != 0
+    - ansible_os_family == "Debian"
