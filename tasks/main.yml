@@ -39,4 +39,4 @@
 - name: "Join active directoty domain"
   #shell: realm join -v -U {{ service_account }}@{{ domain.upper() }} --computer-ou='{{ ou }}' {{ domain }}
   shell: realm -v list
-  when: ad_check.stdout.find("No") != -1
+  when: ad_check.stderr | length != 0
