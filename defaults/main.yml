@@ -2,4 +2,6 @@
   # defaults file for ansible-role-active-directory/
 
   domain: "example.com"
+  service_account: "myuser"
+  ou: "OU=Computers, DC=example, DC=com"
   

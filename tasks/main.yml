@@ -14,7 +14,7 @@
     name: "{{ realmd_package }}"
     state: present
 
-- name: "Discover required packages to join Domain"
+- name: "Discover required packages to join active directory domain"
   shell: realm discover {{ domain }} | grep "required-package:" | awk '{ print $2}'
   register: required_packages
 
@@ -26,17 +26,23 @@
   ansible.builtin.set_fact:
     required_packages: "{{ required_packages.stdout_lines | list }}"
 
-#- name: "Install packages from required_packages discovery"
-#  ansible.builtin.package:
-#    name: "{{ item }}"
-#    state: present
-#  with_items: "{{ required_packages }}"
+- name: "Install packages from required_packages discovery"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ required_packages }}"
 
-- name: "Check if machine is joined to the domain already"
+- name: "Check if host is already joined to the active directory domain"
   shell: realm -v list
   register: ad_check
 
-- name: "Join active directoty domain"
-  #shell: realm join -v -U {{ service_account }}@{{ domain.upper() }} --computer-ou='{{ ou }}' {{ domain }}
-  shell: realm -v list
+# https://access.redhat.com/solutions/5592351
+# Fully-Qualified Username must, the domain must be in CAPS
+- name: "Join host to the active directory domain"
+  shell: realm join -v -U {{ service_account }}@{{ domain.upper() }} --computer-ou='{{ ou }}' {{ domain }}
+  when: ad_check.stderr | length != 0
+
+# https://ubuntu.com/server/docs/service-sssd
+- name: "Update pamd auth to create homedirs for new active directory users"
+  shell: pam-auth-update --enable mkhomedir
   when: ad_check.stderr | length != 0
