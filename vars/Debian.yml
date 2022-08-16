@@ -1,5 +1,6 @@
 ---
 realmd_package: realmd
 krb_package: krb5-user
+krb5_conf: /etc/krb5.conf
 sssd_conf: /etc/sssd/sssd.conf
 sssd_service: sssd
