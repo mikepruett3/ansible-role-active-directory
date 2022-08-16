@@ -60,31 +60,34 @@
     - ansible_os_family == "Debian"
 
 # https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html#realms
-- name: "Update krb5.conf to enable DNS loookup realm setting"
-  ansible.builtin.lineinfile:
-    path: "{{ sssd_conf }}"
-    regexp: "^dns_lookup_realm = false"
-    line: "dns_lookup_realm = true"
-    state: present
-    backup: yes
+#- name: "Update krb5.conf to enable DNS loookup realm setting"
+#  ansible.builtin.lineinfile:
+#    path: "{{ krb5_conf }}"
+#    insertbefore: "^    dns_lookup_realm = false"
+#    line: "    dns_lookup_kdc = true"
+#    state: present
+#    backup: yes
 
 # https://access.redhat.com/solutions/3905181
 # Disable Dynamic DNS Updates
-- name: "Update sssd.conf to disable Dynamic DNS updates"
-  ansible.builtin.lineinfile:
-    path: "{{ sssd_conf }}"
-    insertafter: EOF
-    line: "dyndns_auth = none"
-    state: present
-    backup: yes
+#- name: "Update sssd.conf to disable Dynamic DNS updates"
+#  ansible.builtin.lineinfile:
+#    path: "{{ sssd_conf }}"
+#    insertafter: EOF
+#    line: "{{ item }}"
+#    state: present
+#    backup: yes
+#  with_items:
+#    - "dyndns_auth = none"
+#    - "subdomains_provider = none"
 
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/connecting-rhel-systems-directly-to-ad-using-sssd_integrating-rhel-systems-directly-with-active-directory
 # Remove the SSSD caches
-- name: "Remove the SSSD caches"
-  ansible.builtin.shell: rm -f /var/lib/sss/db/*
+#- name: "Remove the SSSD caches"
+#  ansible.builtin.shell: rm -f /var/lib/sss/db/*
 
-- name: "Restart SSSD Daemon"
-  ansible.builtin.service:
-    name: "{{ sssd_service }}"
-    state: restarted
+#- name: "Restart SSSD Daemon"
+#  ansible.builtin.service:
+#    name: "{{ sssd_service }}"
+#    state: restarted
 
