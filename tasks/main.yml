@@ -8,7 +8,8 @@
 #   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/integrating_rhel_systems_directly_with_windows_active_directory
 
 - name: "Include OS-specific variables"
-  include_vars: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yaml"
 
 - name: "Gather the package facts"
   ansible.builtin.package_facts:
@@ -26,7 +27,7 @@
     state: present
 
 - name: "Discover required packages to join active directory domain"
-  shell: realm discover {{ service_domain }} | grep "required-package:" | awk '{ print $2}'
+  ansible.builtin.shell: realm discover {{ service_domain }} | grep "required-package:" | awk '{ print $2}'
   register: required_packages
 
 - name: "Set required_packages facts"
@@ -40,21 +41,21 @@
   with_items: "{{ required_packages }}"
 
 - name: "Check if host is already joined to the active directory domain"
-  shell: realm -v list
+  ansible.builtin.shell: realm -v list
   register: ad_check
 
 - name: "Obtain Kerberos Ticket for Service Account"
-  shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
+  ansible.builtin.shell: echo -n "{{ service_password }}" | kinit {{ service_account }}@{{ service_domain.upper() }}
   when: ad_check.stderr | length != 0
 
 # https://access.redhat.com/solutions/5592351
 # Fully-Qualified Username must, the domain must be in CAPS
 - name: "Join host to the active directory domain"
-  shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
+  ansible.builtin.shell: echo -n "{{ service_password }}" |realm join -v -U {{ service_account }}@{{ service_domain.upper() }} --computer-ou='{{ ou }}' {{ service_domain }}
   when: ad_check.stderr | length != 0
 
 - name: "Update pamd auth to create homedirs for new active directory users"
-  shell: pam-auth-update --enable mkhomedir
+  ansible.builtin.shell: pam-auth-update --enable mkhomedir
   when:
     - ad_check.stderr | length != 0
     - ansible_os_family == "Debian"

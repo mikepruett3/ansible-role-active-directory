@@ -1,4 +1,6 @@
 ---
+# RedHat vars file for ansible-role-active-directory/
+
 realmd_package: realmd
 krb_package: krb5-workstation
 krb5_conf: /etc/krb5.conf

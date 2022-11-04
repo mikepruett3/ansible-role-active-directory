@@ -1,4 +1,6 @@
 ---
+# Debian vars file for ansible-role-active-directory/
+
 realmd_package: realmd
 krb_package: krb5-user
 krb5_conf: /etc/krb5.conf
