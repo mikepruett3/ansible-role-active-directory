@@ -87,8 +87,15 @@
 #- name: "Remove the SSSD caches"
 #  ansible.builtin.shell: rm -f /var/lib/sss/db/*
 
-#- name: "Restart SSSD Daemon"
-#  ansible.builtin.service:
-#    name: "{{ sssd_service }}"
-#    state: restarted
+- name: "Add the appropriate AD Site to sshd_conf"
+  ansible.builtin.lineinfile:
+    path: "{{ sssd_conf }}"
+    regexp: '^\[domain\/{{ service_domain }}]'
+    insertafter: '^\[domain\/{{ service_domain }}]'
+    line: 'ad_site = {{ ad_site }}'
+
+- name: "Restart SSSD Daemon"
+  ansible.builtin.service:
+    name: "{{ sssd_service }}"
+    state: restarted
 
