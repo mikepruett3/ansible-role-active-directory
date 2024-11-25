@@ -94,8 +94,27 @@
     insertafter: '^\[domain\/{{ service_domain }}]'
     line: 'ad_site = {{ ad_site }}'
 
-- name: "Restart SSSD Daemon"
+- name: "Add timeout to sssd_conf"
+  ansible.builtin.lineinfile:
+    path: "{{ sssd_conf }}"
+    line: "timeout = 30"
+    state: present
+    #backup: yes
+
+- name: "Stop SSSD Daemon"
   ansible.builtin.service:
     name: "{{ sssd_service }}"
-    state: restarted
+    state: stopped
+
+- name: "Delete SSS Daemon DB files, and restart service"
+  ansible.builtin.shell: |
+    rm -f /var/lib/sss/db/*
+    rm -f /var/log/sssd/*
+  args:
+    removes: /var/log/sssd/sssd.log
+
+- name: "Start SSSD Daemon"
+  ansible.builtin.service:
+    name: "{{ sssd_service }}"
+    state: started
 
